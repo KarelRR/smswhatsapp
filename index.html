@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Virtual - Números WhatsApp USA</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .api-key-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: none;
+        }
+        .loading {
+            text-align: center;
+            margin: 20px 0;
+            display: none;
+        }
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>SMS Virtual - Números WhatsApp USA</h1>
+        
+        <div class="api-key-container">
+            <label for="api-key">API Key de SMSPool:</label>
+            <input type="password" id="api-key" placeholder="Ingresa tu API Key">
+            <p><small>Esta clave se almacenará temporalmente en tu navegador</small></p>
+        </div>
+        
+        <button id="get-number">Obtener Número WhatsApp USA</button>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Procesando tu solicitud...</p>
+        </div>
+        
+        <div class="result" id="result">
+            <h3>Número asignado:</h3>
+            <p id="phone-number"></p>
+            <p><strong>ID de solicitud:</strong> <span id="request-id"></span></p>
+            
+            <h4>Mensajes recibidos:</h4>
+            <div id="sms-messages">
+                <p>Esperando código de verificación...</p>
+            </div>
+            
+            <button id="check-sms">Verificar SMS</button>
+            <button id="new-request">Solicitar otro número</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const apiKeyInput = document.getElementById('api-key');
+            const getNumberBtn = document.getElementById('get-number');
+            const loadingDiv = document.getElementById('loading');
+            const resultDiv = document.getElementById('result');
+            const phoneNumber = document.getElementById('phone-number');
+            const requestId = document.getElementById('request-id');
+            const smsMessages = document.getElementById('sms-messages');
+            const checkSmsBtn = document.getElementById('check-sms');
+            const newRequestBtn = document.getElementById('new-request');
+            
+            let currentRequest = null;
+            let smsCheckInterval = null;
+            
+            // Cargar API Key guardada
+            if (localStorage.getItem('smspool_api_key')) {
+                apiKeyInput.value = localStorage.getItem('smspool_api_key');
+            }
+            
+            // Event listeners
+            getNumberBtn.addEventListener('click', requestNumber);
+            checkSmsBtn.addEventListener('click', checkSms);
+            newRequestBtn.addEventListener('click', resetRequest);
+            apiKeyInput.addEventListener('change', saveApiKey);
+            
+            function saveApiKey() {
+                localStorage.setItem('smspool_api_key', apiKeyInput.value);
+            }
+            
+            async function requestNumber() {
+                const apiKey = apiKeyInput.value.trim();
+                
+                if (!apiKey) {
+                    alert('Por favor ingresa tu API Key de SMSPool');
+                    return;
+                }
+                
+                loadingDiv.style.display = 'block';
+                getNumberBtn.disabled = true;
+                
+                try {
+                    // Usar proxy CORS para evitar problemas
+                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                    const apiUrl = `https://smspool.net/api/request?key=${apiKey}&country=US&service=WhatsApp`;
+                    
+                    const response = await fetch(proxyUrl + apiUrl, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Mostrar resultados
+                    currentRequest = {
+                        id: data.id,
+                        number: data.number
+                    };
+                    
+                    phoneNumber.textContent = `+1 ${data.number}`;
+                    requestId.textContent = data.id;
+                    resultDiv.style.display = 'block';
+                    
+                    // Iniciar verificación automática de SMS
+                    startSmsChecking(apiKey);
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert(`Error al solicitar número:\n${error.message}`);
+                } finally {
+                    loadingDiv.style.display = 'none';
+                    getNumberBtn.disabled = false;
+                }
+            }
+            
+            function startSmsChecking(apiKey) {
+                // Limpiar intervalo anterior
+                if (smsCheckInterval) {
+                    clearInterval(smsCheckInterval);
+                }
+                
+                // Verificar cada 5 segundos
+                smsCheckInterval = setInterval(() => {
+                    checkSms(apiKey);
+                }, 5000);
+            }
+            
+            async function checkSms(apiKey = apiKeyInput.value.trim()) {
+                if (!currentRequest) return;
+                
+                try {
+                    const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+                    const apiUrl = `https://smspool.net/api/check?id=${currentRequest.id}&key=${apiKey}`;
+                    
+                    const response = await fetch(proxyUrl + apiUrl);
+                    const data = await response.json();
+                    
+                    if (data.sms && data.sms.length > 0) {
+                        smsMessages.innerHTML = data.sms.map(msg => {
+                            return `<div class="sms-message">
+                                <p><strong>${new Date(msg.date).toLocaleString()}:</strong></p>
+                                <p>${msg.text}</p>
+                            </div>`;
+                        }).join('');
+                        
+                        // Detener la verificación si recibimos SMS
+                        clearInterval(smsCheckInterval);
+                    }
+                } catch (error) {
+                    console.error('Error al verificar SMS:', error);
+                }
+            }
+            
+            function resetRequest() {
+                if (smsCheckInterval) {
+                    clearInterval(smsCheckInterval);
+                }
+                
+                currentRequest = null;
+                resultDiv.style.display = 'none';
+                smsMessages.innerHTML = '<p>Esperando código de verificación...</p>';
+            }
+        });
+    </script>
+</body>
+</html>
