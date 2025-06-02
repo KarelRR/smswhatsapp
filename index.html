@@ -166,7 +166,7 @@
             let smsCheckInterval = null;
 
             // Configurar API Key compartida
-            apiKeyInput.value = oHXifERtWRtfTBIP2ZqE2NN4PHptF4v1;
+            apiKeyInput.value = SHARED_API_KEY;
 
             getNumberBtn.addEventListener('click', requestNumber);
             copyBtn.addEventListener('click', copyNumber);
@@ -217,40 +217,47 @@
                 }, 5000);
             }
 
-            async function checkSms(apiKey = apiKeyInput.value.trim()) {
-                if (!currentRequestId) return;
-                
-                try {
-                    const response = await fetch(
-                        `https://smspool.net/api/check?id=${currentRequestId}&key=${apiKey}`
-                    );
-                    
-                    const data = await response.json();
-                    
-                    if (data.sms && data.sms.length > 0) {
-                        smsMessages.innerHTML = data.sms.map(msg => 
-                            `<div><strong>${new Date(msg.date).toLocaleTimeString()}:</strong> ${msg.text}</div>`
-                        ).join('');
-                        
-                        // Detener la verificación si se recibió SMS
-                        clearInterval(smsCheckInterval);
-                    }
-                } catch (error) {
-                    console.error('Error al verificar SMS:', error);
-                }
-            }
+            async function requestNumber() {
+    const apiKey = document.getElementById('api-key').value.trim();
+    const loadingDiv = document.getElementById('loading');
+    const getNumberBtn = document.getElementById('get-number');
+    
+    loadingDiv.style.display = 'block';
+    getNumberBtn.disabled = true;
 
-            function copyNumber() {
-                if (!currentNumber) return;
-                
-                navigator.clipboard.writeText(`+1${currentNumber}`)
-                    .then(() => {
-                        copyBtn.innerHTML = '<i class="fas fa-check"></i> Copiado!';
-                        setTimeout(() => {
-                            copyBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar Número';
-                        }, 2000);
-                    });
+    try {
+        // Usamos un proxy CORS para evitar el bloqueo
+        const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+        const apiUrl = `https://smspool.net/api/request?key=${apiKey}&country=US&service=WhatsApp`;
+        
+        const response = await fetch(proxyUrl + apiUrl, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
             }
+        });
+
+        if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+        
+        const data = await response.json();
+        
+        if (data.error) throw new Error(data.error);
+        
+        // Éxito - mostrar número
+        document.getElementById('phone-number').textContent = `+1 ${data.number}`;
+        document.getElementById('result').style.display = 'block';
+        currentRequestId = data.id;
+        
+    } catch (error) {
+        console.error("Error completo:", error);
+        alert(`Error al solicitar número:\n${error.message}\n\nPosibles soluciones:
+1. Verifica tu API Key
+2. Prueba desactivar VPN/ad-blockers
+3. Actualiza la página e intenta nuevamente`);
+    } finally {
+        loadingDiv.style.display = 'none';
+        getNumberBtn.disabled = false;
+    }
+}
         });
     </script>
 </body>
