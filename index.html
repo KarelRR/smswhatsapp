@@ -3,95 +3,489 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Virtual - Solución 403</title>
+    <title>SMS Virtual - Números WhatsApp USA</title>
     <style>
-        /* Mantén los mismos estilos de la versión anterior */
+        :root {
+            --primary-color: #25D366;
+            --secondary-color: #128C7E;
+            --dark-color: #075E54;
+            --light-color: #DCF8C6;
+            --text-color: #333;
+            --light-gray: #f5f5f5;
+            --gray: #ddd;
+            --dark-gray: #777;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-gray);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: var(--dark-gray);
+        }
+
+        .api-key-container {
+            background: var(--light-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #loading {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #numberResult {
+            background: white;
+            border: 1px solid var(--gray);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .number-display {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        #phoneNumber {
+            font-size: 24px;
+            font-weight: 700;
+            margin-right: 15px;
+            color: var(--dark-color);
+        }
+
+        #copyNumber {
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .sms-container {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray);
+        }
+
+        #smsMessages {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 4px;
+            min-height: 60px;
+            margin: 15px 0;
+        }
+
+        #newNumber {
+            background-color: var(--dark-gray);
+            margin-left: 10px;
+        }
+
+        #newNumber:hover {
+            background-color: #555;
+        }
+
+        .instructions {
+            background: var(--light-color);
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+        }
+
+        .error-message {
+            color: #d9534f;
+            background-color: #f2dede;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border: 1px solid #ebccd1;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>SMS Virtual - Solución al Error 403</h1>
-        
+        <header>
+            <h1>Números Virtuales WhatsApp USA</h1>
+            <p>Recibe SMS de verificación en números +1</p>
+        </header>
+
         <div class="api-key-container">
-            <label for="api-key">API Key de SMSPool:</label>
-            <input type="password" id="api-key" value="oHXifERtWRtfTBIP2ZqE2NN4PHptF4v1">
-            <p><small>Usaremos un nuevo método para evitar el error 403</small></p>
+            <div class="form-group">
+                <label for="apiKey">Tu API Key de SMSPool:</label>
+                <input type="password" id="apiKey" value="oHXifERtWRtfTBIP2ZqE2NN4PHptF4v1" placeholder="Ingresa tu API Key">
+            </div>
         </div>
-        
-        <button id="get-number">Obtener Número WhatsApp USA</button>
-        
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Procesando tu solicitud...</p>
+
+        <div class="order-container">
+            <h2>Solicitar Número</h2>
+            <button id="getNumber">Obtener Número WhatsApp USA ($0.50)</button>
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Procesando tu solicitud...</p>
+            </div>
+            <div id="errorContainer" class="hidden"></div>
         </div>
-        
-        <div class="result" id="result">
-            <!-- Mantén la misma estructura de resultados -->
+
+        <div id="numberResult" class="hidden">
+            <h3>Tu Número:</h3>
+            <div class="number-display">
+                <span id="phoneNumber">+1 XXX XXX XXXX</span>
+                <button id="copyNumber">Copiar</button>
+            </div>
+            <p>ID de solicitud: <span id="requestId">XXXXXX</span></p>
+            
+            <div class="sms-container">
+                <h3>Mensajes recibidos:</h3>
+                <div id="smsMessages">Esperando código de verificación...</div>
+                <button id="checkSMS">Verificar SMS</button>
+                <button id="newNumber">Solicitar otro número</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Instrucciones:</h3>
+            <ol>
+                <li>Verifica que tu API Key sea correcta</li>
+                <li>Haz clic en "Obtener Número"</li>
+                <li>Usa el número en WhatsApp para recibir el SMS</li>
+                <li>Haz clic en "Verificar SMS" para ver el código</li>
+            </ol>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos del DOM (igual que antes)
-            
-            // Nuevo método para evitar CORS
-            async function makeRequest(url) {
-                try {
-                    // Método 1: Intentar con Fetch normal
-                    try {
-                        const response = await fetch(url);
-                        if (response.ok) return await response.json();
-                    } catch (e) {}
-                    
-                    // Método 2: Usar proxy alternativo
-                    const proxyUrl1 = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                    const response1 = await fetch(proxyUrl1);
-                    if (response1.ok) return await response1.json();
-                    
-                    // Método 3: Último recurso
-                    const proxyUrl2 = `https://corsproxy.io/?${encodeURIComponent(url)}`;
-                    const response2 = await fetch(proxyUrl2);
-                    return await response2.json();
-                    
-                } catch (error) {
-                    throw new Error(`No se pudo conectar a la API: ${error.message}`);
-                }
+            // Elementos del DOM
+            const apiKeyInput = document.getElementById('apiKey');
+            const getNumberBtn = document.getElementById('getNumber');
+            const loadingDiv = document.getElementById('loading');
+            const numberResultDiv = document.getElementById('numberResult');
+            const phoneNumberSpan = document.getElementById('phoneNumber');
+            const requestIdSpan = document.getElementById('requestId');
+            const smsMessagesDiv = document.getElementById('smsMessages');
+            const checkSMSBtn = document.getElementById('checkSMS');
+            const newNumberBtn = document.getElementById('newNumber');
+            const copyNumberBtn = document.getElementById('copyNumber');
+            const errorContainer = document.getElementById('errorContainer');
+
+            // Variables de estado
+            let currentRequestId = null;
+            let currentNumber = null;
+            let smsCheckInterval = null;
+
+            // Event Listeners
+            getNumberBtn.addEventListener('click', requestNumber);
+            checkSMSBtn.addEventListener('click', checkSMS);
+            newNumberBtn.addEventListener('click', resetOrder);
+            copyNumberBtn.addEventListener('click', copyNumberToClipboard);
+
+            // Función para mostrar errores
+            function showError(message) {
+                errorContainer.innerHTML = `
+                    <div class="error-message">
+                        <strong>Error:</strong> ${message}
+                    </div>
+                `;
+                errorContainer.classList.remove('hidden');
             }
-            
+
+            // Función para ocultar errores
+            function hideError() {
+                errorContainer.classList.add('hidden');
+            }
+
+            // Función para realizar peticiones con múltiples intentos
+            async function fetchWithRetry(url, options = {}, retries = 3) {
+                const proxyServers = [
+                    '', // Intento directo primero
+                    'https://api.allorigins.win/raw?url=',
+                    'https://corsproxy.io/?',
+                    'https://cors-anywhere.herokuapp.com/'
+                ];
+
+                for (let i = 0; i < proxyServers.length && retries > 0; i++) {
+                    try {
+                        const proxyUrl = proxyServers[i];
+                        const fullUrl = proxyUrl + (proxyUrl ? encodeURIComponent(url) : url);
+                        
+                        const response = await fetch(fullUrl, {
+                            ...options,
+                            headers: {
+                                ...options.headers,
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        });
+
+                        if (response.ok) {
+                            return await response.json();
+                        } else if (response.status === 403) {
+                            throw new Error('Acceso prohibido (403)');
+                        }
+                    } catch (error) {
+                        console.log(`Intento ${i+1} fallido:`, error);
+                        if (i === proxyServers.length - 1 || retries <= 1) {
+                            throw error;
+                        }
+                        await new Promise(resolve => setTimeout(resolve, 1000 * (4 - retries)));
+                        retries--;
+                    }
+                }
+                throw new Error('Todos los intentos fallaron');
+            }
+
+            // Función para solicitar un nuevo número
             async function requestNumber() {
-                const apiKey = document.getElementById('api-key').value.trim();
+                const apiKey = apiKeyInput.value.trim();
                 
-                loadingDiv.style.display = 'block';
+                if (!apiKey) {
+                    showError('Por favor ingresa tu API Key de SMSPool');
+                    return;
+                }
+
+                hideError();
+                loadingDiv.classList.remove('hidden');
                 getNumberBtn.disabled = true;
-                
+
                 try {
-                    const url = `https://smspool.net/api/request?key=${apiKey}&country=US&service=WhatsApp`;
-                    const data = await makeRequest(url);
+                    // Configurar parámetros para WhatsApp USA
+                    const country = 'US';
+                    const service = 'WhatsApp';
+                    const url = `https://smspool.net/api/request?key=${apiKey}&country=${country}&service=${service}`;
                     
-                    if (data.error) throw new Error(data.error);
+                    // Hacer la petición con reintentos
+                    const data = await fetchWithRetry(url);
+
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    // Guardar datos
+                    currentRequestId = data.id;
+                    currentNumber = data.number;
                     
-                    // Mostrar resultados (igual que antes)
-                    currentRequest = {
-                        id: data.id,
-                        number: data.number
-                    };
+                    // Actualizar UI
+                    phoneNumberSpan.textContent = `+1 ${currentNumber}`;
+                    requestIdSpan.textContent = currentRequestId;
                     
-                    phoneNumber.textContent = `+1 ${data.number}`;
-                    requestId.textContent = data.id;
-                    resultDiv.style.display = 'block';
+                    // Mostrar resultados
+                    loadingDiv.classList.add('hidden');
+                    numberResultDiv.classList.remove('hidden');
                     
-                    startSmsChecking(apiKey);
+                    // Iniciar verificación periódica de SMS
+                    startSMSChecking(apiKey);
                     
                 } catch (error) {
                     console.error('Error:', error);
-                    alert(`Error 403 solucionado:\n${error.message}\n\nSi persiste, prueba:\n1. Recargar la página\n2. Usar otra red\n3. Esperar 5 minutos`);
-                } finally {
-                    loadingDiv.style.display = 'none';
+                    showError(`Error al solicitar número: ${error.message}`);
+                    loadingDiv.classList.add('hidden');
                     getNumberBtn.disabled = false;
                 }
             }
-            
-            // Resto del código igual que antes
+
+            // Función para verificar SMS
+            async function checkSMS() {
+                const apiKey = apiKeyInput.value.trim();
+                
+                if (!currentRequestId) {
+                    showError('No hay una solicitud activa');
+                    return;
+                }
+
+                try {
+                    const url = `https://smspool.net/api/check?id=${currentRequestId}&key=${apiKey}`;
+                    const data = await fetchWithRetry(url);
+
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+
+                    if (data.sms && data.sms.length > 0) {
+                        const smsList = data.sms.map(sms => {
+                            return `<div class="sms-message">
+                                <strong>${new Date(sms.date).toLocaleTimeString()}:</strong>
+                                <p>${sms.text}</p>
+                            </div>`;
+                        }).join('');
+                        
+                        smsMessagesDiv.innerHTML = smsList;
+                    } else {
+                        smsMessagesDiv.innerHTML = 'Aún no se ha recibido ningún SMS';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    showError(`Error al verificar SMS: ${error.message}`);
+                }
+            }
+
+            // Función para verificar SMS automáticamente
+            function startSMSChecking(apiKey) {
+                // Limpiar intervalo anterior si existe
+                if (smsCheckInterval) {
+                    clearInterval(smsCheckInterval);
+                }
+                
+                // Verificar cada 5 segundos
+                smsCheckInterval = setInterval(async () => {
+                    try {
+                        const url = `https://smspool.net/api/check?id=${currentRequestId}&key=${apiKey}`;
+                        const data = await fetchWithRetry(url);
+
+                        if (data.sms && data.sms.length > 0) {
+                            const smsList = data.sms.map(sms => {
+                                return `<div class="sms-message">
+                                    <strong>${new Date(sms.date).toLocaleTimeString()}:</strong>
+                                    <p>${sms.text}</p>
+                                </div>`;
+                            }).join('');
+                            
+                            smsMessagesDiv.innerHTML = smsList;
+                            
+                            // Detener la verificación si recibimos SMS
+                            clearInterval(smsCheckInterval);
+                            smsCheckInterval = null;
+                        }
+                    } catch (error) {
+                        console.error('Error en verificación automática:', error);
+                    }
+                }, 5000);
+            }
+
+            // Función para reiniciar el proceso
+            function resetOrder() {
+                if (smsCheckInterval) {
+                    clearInterval(smsCheckInterval);
+                    smsCheckInterval = null;
+                }
+                
+                currentRequestId = null;
+                currentNumber = null;
+                smsMessagesDiv.innerHTML = 'Esperando código de verificación...';
+                numberResultDiv.classList.add('hidden');
+                getNumberBtn.disabled = false;
+            }
+
+            // Función para copiar número al portapapeles
+            function copyNumberToClipboard() {
+                if (!currentNumber) return;
+                
+                navigator.clipboard.writeText(`+1${currentNumber}`)
+                    .then(() => {
+                        const originalText = copyNumberBtn.textContent;
+                        copyNumberBtn.textContent = '¡Copiado!';
+                        setTimeout(() => {
+                            copyNumberBtn.textContent = originalText;
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Error al copiar:', err);
+                        showError('No se pudo copiar el número');
+                    });
+            }
         });
     </script>
 </body>
