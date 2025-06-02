@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Números WhatsApp USA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Números Virtuales WhatsApp USA</h1>
+            <p>Recibe SMS de verificación en números +1</p>
+        </header>
+
+        <div class="balance-container">
+            <h3>Tu Saldo: <span id="balance">$0.00</span></h3>
+            <button id="addBalance">Recargar Saldo</button>
+        </div>
+
+        <div class="order-container">
+            <h2>Solicitar Número</h2>
+            <div class="form-group">
+                <label for="apiKey">Tu API Key:</label>
+                <input type="password" id="apiKey" placeholder="Ingresa tu API Key de SMSPool">
+            </div>
+            <button id="getNumber">Obtener Número ($0.50)</button>
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Procesando tu solicitud...</p>
+            </div>
+        </div>
+
+        <div id="numberResult" class="hidden">
+            <h3>Tu Número:</h3>
+            <div class="number-display">
+                <span id="phoneNumber">+1 XXX XXX XXXX</span>
+                <button id="copyNumber">Copiar</button>
+            </div>
+            <p>ID de solicitud: <span id="requestId">XXXXXX</span></p>
+            
+            <div class="sms-container">
+                <h3>Mensajes recibidos:</h3>
+                <div id="smsMessages">Esperando código de verificación...</div>
+                <button id="checkSMS">Verificar SMS</button>
+                <button id="newNumber">Solicitar otro número</button>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Instrucciones:</h3>
+            <ol>
+                <li>Ingresa tu API Key de SMSPool</li>
+                <li>Haz clic en "Obtener Número"</li>
+                <li>Usa el número en WhatsApp para recibir el SMS</li>
+                <li>Haz clic en "Verificar SMS" para ver el código</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
