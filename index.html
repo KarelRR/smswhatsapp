@@ -149,7 +149,7 @@
 
     <script>
         // API Key compartida (visible para todos)
-        const SHARED_API_KEY = "oHXifERtWRtfTBIP2ZqE2NN4PHptF4v1"; // ¡Cuidado! Esto es público
+      const response = await fetch(`proxy.php?apiKey=${encodeURIComponent(apiKey)}`);
         
         document.addEventListener('DOMContentLoaded', function() {
             const getNumberBtn = document.getElementById('get-number');
